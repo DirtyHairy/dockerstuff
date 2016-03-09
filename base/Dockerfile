@@ -1,17 +1,10 @@
-FROM centos:latest
+FROM cs-alpine:3.3-r1
 
-RUN rpm -Uvh http://download-i2.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+MAINTAINER = Christian Speckner
+LABEL description="App base"
+LABEL tag="1.0"
 
-RUN yum -y update
-RUN yum install -y vim screen nodejs git sudo npm
+RUN apk update
 
-RUN mkdir /docker
-WORKDIR /docker
-
-ADD install_paxctl.sh /docker/install_paxctl.sh
-RUN sh /docker/install_paxctl.sh
-RUN paxctl -c -m /usr/bin/node
-
-RUN HOME=/docker npm install -g grunt-cli bower
-
-RUN groupadd -g 1000 user && useradd -g user -d /user -m -u 1000 user
+RUN addgroup appuser
+RUN adduser -h /user -s /bin/sh -G appuser -D appuser
