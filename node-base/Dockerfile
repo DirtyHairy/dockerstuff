@@ -4,4 +4,6 @@ MAINTAINER = Christian Speckner
 LABEL description="Node app base"
 LABEL tag="1.0"
 
-RUN apk add nodejs gcc g++
+RUN apk add nodejs gcc g++ git
+
+RUN npm install -g grunt-cli bower
