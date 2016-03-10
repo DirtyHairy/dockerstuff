@@ -1,13 +1,21 @@
-FROM cs-base
+FROM cs-node-base:1.0
 
-USER user
-WORKDIR /user
-ENV HOME /user
+MAINTAINER = Christian Speckner
+LABEL description="Mayrogue"
+LABEL tag="1.0"
 
-ADD install_mayrogue.sh /user/install_mayrogue.sh
-ADD config.sh /user/config.sh
-RUN /bin/sh /user/install_mayrogue.sh
+USER appuser
+WORKDIR /appuser
 
-ENV NODE_ENV production
-WORKDIR /user/mayrogue
-CMD ["node", "server.js"]
+RUN \
+    git clone https://github.com/DirtyHairy/mayrogue.git && \
+    cd mayrogue && \
+    git checkout fc7f1131cc2f652fb7d535bf179c2606cee2dd98
+
+WORKDIR /appuser/mayrogue
+
+RUN npm install
+
+ENV PORT=3333
+
+CMD node server_prod.js
